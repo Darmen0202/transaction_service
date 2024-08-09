@@ -36,7 +36,7 @@ public class TransactionService {
         transaction.setLimitExceeded(false);
         BigDecimal inUSD = calculateTransactionInUSD(transaction);
         try {
-            Limit limit = limitRepository.findByAccountId(transaction.getAccountFrom());
+            Limit limit = limitRepository.findByAccountIdAndExpenseCategory(transaction.getAccountFrom(), transaction.getExpenseCategory());
 
             if (limit != null && limit.getExpenseCategory().equals(transaction.getExpenseCategory())) {
                 limit.setLimitSum(limit.getLimitSum().subtract(inUSD));
