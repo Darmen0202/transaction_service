@@ -10,3 +10,4 @@ public interface LimitRepository extends JpaRepository<Limit, Long> {
 
     Limit findByAccountIdAndExpenseCategory(Long accountFrom, String expenseCategory);
 }
+

@@ -69,6 +69,7 @@ public class TransactionService {
         return transactionMapper.toDto(transaction);
     }
 
+<<<<<<< HEAD
     private BigDecimal calculateTransactionInUSD(Transaction transaction) {
         if ("USD".equals(transaction.getCurrencyShortname())) {
             return transaction.getSum();
@@ -83,3 +84,6 @@ public class TransactionService {
         }
     }
 }
+=======
+}
+>>>>>>> 2257a6ef7542784daee48379e1a1893bc936c06b
