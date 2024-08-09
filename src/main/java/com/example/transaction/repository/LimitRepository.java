@@ -7,4 +7,7 @@ public interface LimitRepository extends JpaRepository<Limit, Long> {
     Limit findByExpenseCategory(String expenseCategory);
 
     Limit findByAccountId(Long accountId);
+
+    Limit findByAccountIdAndExpenseCategory(Long accountFrom, String expenseCategory);
 }
+
