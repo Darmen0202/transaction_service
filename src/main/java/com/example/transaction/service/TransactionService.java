@@ -36,12 +36,12 @@ public class TransactionService {
         transaction.setLimitExceeded(false);
         BigDecimal inUSD = calculateTransactionInUSD(transaction);
         try {
-            Limit limit = limitRepository.findByAccountId(transaction.getAccountFrom());
+            Limit limit = limitRepository.findByAccountIdAndExpenseCategory(transaction.getAccountFrom(), transaction.getExpenseCategory());
 
             if (limit != null && limit.getExpenseCategory().equals(transaction.getExpenseCategory())) {
                 limit.setLimitSum(limit.getLimitSum().subtract(inUSD));
                 limitRepository.save(limit);
-                if (limit.getLimitSum().signum() < 0) {
+                if (limit.getLimitSum().signum() <= 0) {
                     transaction.setLimitExceeded(true);
                 } else {
                     transaction.setLimitExceeded(false);
@@ -64,14 +64,22 @@ public class TransactionService {
         return transactionMapper.toDto(savedTransaction);
     }
 
-    private BigDecimal calculateTransactionInUSD(Transaction transaction) {
-        String currencyPair = "USD/" + transaction.getCurrencyShortname();
-        ExchangeRate exchangeRate = exchangeRateRepository.findTopByCurrencyPairOrderByDateDesc(currencyPair);
-        if (exchangeRate != null) {
-            BigDecimal amountInUSD = transaction.getSum().divide(exchangeRate.getRate(), RoundingMode.HALF_UP);
-            return amountInUSD;
-        }
-        return BigDecimal.ZERO;
+    public TransactionDTO exceedingLimits(Long accountId) {
+        Transaction transaction = transactionRepository.findByAccountFromAndLimitExceeded(accountId, true);
+        return transactionMapper.toDto(transaction);
     }
 
+    private BigDecimal calculateTransactionInUSD(Transaction transaction) {
+        if ("USD".equals(transaction.getCurrencyShortname())) {
+            return transaction.getSum();
+        } else {
+            String currencyPair = "USD/" + transaction.getCurrencyShortname();
+            ExchangeRate exchangeRate = exchangeRateRepository.findTopByCurrencyPairOrderByDateDesc(currencyPair);
+            if (exchangeRate != null) {
+                BigDecimal amountInUSD = transaction.getSum().divide(exchangeRate.getRate(), RoundingMode.HALF_UP);
+                return amountInUSD;
+            }
+            return BigDecimal.ZERO;
+        }
+    }
 }

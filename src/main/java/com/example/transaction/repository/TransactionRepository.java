@@ -8,4 +8,5 @@ import java.time.ZonedDateTime;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findByDatetimeBetween(ZonedDateTime start, ZonedDateTime end);
 
+    Transaction findByAccountFromAndLimitExceeded(Long accountId, Boolean limitExceeded);
 }

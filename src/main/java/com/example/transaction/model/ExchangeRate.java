@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "ExchangeRate")
+@Table(name = "exchange_rate")
 public class ExchangeRate{
 
     @Id

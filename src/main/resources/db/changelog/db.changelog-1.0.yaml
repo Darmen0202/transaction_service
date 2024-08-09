@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: DarmenK
+      author: Darmen
       changes:
         - createTable:
-            tableName: Transaction
+            tableName: transaction
             columns:
               - column:
                   name: id
@@ -50,10 +50,10 @@ databaseChangeLog:
 
   - changeSet:
       id: 2
-      author: DarmenK
+      author: Darmen
       changes:
         - createTable:
-            tableName: MonthlyLimits
+            tableName: monthly_limits
             columns:
               - column:
                   name: id
@@ -62,32 +62,37 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
               - column:
+                  name: account_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
                   name: category
                   type: VARCHAR(50)
                   constraints:
                     nullable: false
               - column:
-                  name: limit_sum
+                  name: amount
                   type: DECIMAL(15, 2)
                   constraints:
                     nullable: false
               - column:
-                  name: limit_datetime
+                  name: set_date
                   type: TIMESTAMP WITH TIME ZONE
                   constraints:
                     nullable: false
               - column:
-                  name: limit_currency_shortname
+                  name: currency_shortname
                   type: VARCHAR(3)
                   constraints:
                     nullable: false
 
   - changeSet:
       id: 3
-      author: DarmenK
+      author: Darmen
       changes:
         - createTable:
-            tableName: ExchangeRate
+            tableName: exchange_rate
             columns:
               - column:
                   name: id

@@ -1,11 +1,12 @@
 package com.example.transaction.model;
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "Transaction")
+@Table(name = "transaction")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

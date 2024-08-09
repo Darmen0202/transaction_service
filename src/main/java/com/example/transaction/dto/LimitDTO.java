@@ -13,7 +13,6 @@ import java.io.Serializable;
 
 public class LimitDTO {
     String expenseCategory;
-
     Long accountId;
     BigDecimal limitSum;
     ZonedDateTime limitDatetime;

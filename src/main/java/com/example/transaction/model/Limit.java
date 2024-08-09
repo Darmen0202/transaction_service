@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "MonthlyLimits")
+@Table(name = "monthly_limits")
 public class Limit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,6 +85,18 @@ public class Limit {
 
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
+    }
+
+    @Override
+    public String toString() {
+        return "Limit{" +
+                "id=" + id +
+                ", accountId=" + accountId +
+                ", expenseCategory='" + expenseCategory + '\'' +
+                ", limitSum=" + limitSum +
+                ", limitDatetime=" + limitDatetime +
+                ", limitCurrencyShortname='" + limitCurrencyShortname + '\'' +
+                '}';
     }
 }
 

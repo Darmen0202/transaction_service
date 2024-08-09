@@ -1,6 +1,8 @@
 package com.example.transaction.service;
 
+import com.example.transaction.dto.ExchangeRateDTO;
 import com.example.transaction.dto.ExchangeRateResponse;
+import com.example.transaction.mapper.ExchangeRateMapper;
 import com.example.transaction.model.ExchangeRate;
 import com.example.transaction.repository.ExchangeRateRepository;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExchangeRateService {
@@ -29,7 +32,10 @@ public class ExchangeRateService {
     @Value("${exchange.rate.api.key}")
     private String apiKey;
 
-    @Scheduled(cron = "30 4 2 * * ?")
+    @Autowired
+    private ExchangeRateMapper exchangeRateMapper;
+
+    @Scheduled(cron = "40 31 0 * * ?")
     public void fetchDailyExchangeRates() {
         fetchExchangeRate();
     }
@@ -78,5 +84,18 @@ public class ExchangeRateService {
         }
 
         return exchangeRates;
+    }
+
+    public List<ExchangeRateDTO> getAllExchangeRates() {
+        List<String> pairs = List.of("USD/RUB", "USD/KZT");
+        List<ExchangeRate> exchangeRates = exchangeRateRepository.findLatestRates(pairs);
+        return exchangeRates.stream()
+                .map(exchangeRateMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public ExchangeRateDTO getLatestExchangeRate(String currencyPair) {
+        ExchangeRate exchangeRate = exchangeRateRepository.findTopByCurrencyPairOrderByDateDesc(currencyPair);
+        return exchangeRateMapper.toDto(exchangeRate);
     }
 }
